@@ -9,8 +9,10 @@ import {
   CloseOutlined,
   FormOutlined
 } from '@ant-design/icons';
+import ImageLoader from '../ImageLoader';
 
 interface Image {
+  id: string;
   controlId: string;
   url: string;
   title: string;
@@ -40,10 +42,13 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [option, setOption] = useState<any>(null);
   const [isMouseMoving, setIsMouseMoving] = useState(false);
-  const [enviromentSelected, setEnviromentSelected] = useState(null);
+  const [sectionSelected, setSectionSelected] = useState("");
 
   useEffect(() => {
     let timeoutId: any;
+
+    if(data.controls.length>0)
+      setSectionSelected(data.controls[0].id);
 
     const handleMouseMove = () => {
       setIsMouseMoving(true);
@@ -53,7 +58,6 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
         setIsMouseMoving(false);
       }, 2000); 
     };
-
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
@@ -68,7 +72,16 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   }
 
   const handleTexture = (image: Image) => {
-    setSelectedTextures([...selectedTextures, image]);
+    const existingTextureIndex = selectedTextures.findIndex((item) => item.controlId === image.controlId);
+
+    if (existingTextureIndex !== -1) {
+      const updatedTextures = [...selectedTextures];
+      updatedTextures[existingTextureIndex] = image;
+      setSelectedTextures(updatedTextures);
+    } else {
+      setSelectedTextures([...selectedTextures, image]);
+    }
+    console.log(selectedTextures);
   };
 
   const handleSidebar = () => {
@@ -76,7 +89,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   }
 
   const handleEnviroment = (data: any) => {
-    setEnviromentSelected(data.id);
+    setSectionSelected(data.id);
     setOption(2);
     setOpenSidebar(true);
   }
@@ -91,22 +104,23 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
       <div className='editor-container'>
         <div className='enviroment-container'>
             <div className='editor-wrapper'>
-              <img src={data.originalEnviroment} alt="" className='original-enviroment'/>
-              <img src={data.backImage} alt="Back Image" className='img-bg'/>
+              <ImageLoader src={data.originalEnviroment} alt="" className='original-enviroment' loading="lazy"/>
+              <ImageLoader src={data.backImage} alt="Back Image" className='img-bg' loading="lazy"/>
               {selectedTextures.map((item, index) => (
-                  <img 
+                  <ImageLoader 
                     className='img-layer'
                     src={item.url} 
                     alt={item.title} 
                     key={index} 
+                    loading="lazy"
                   />
               ))}
-              <img src={data.frontImage} alt="Front Image" />
+              <ImageLoader src={data.frontImage} alt="Front Image" loading="lazy"/>
               {
                 data.controls.map((item, index)=> {
                   return (
                     <button 
-                      className = {`enviroment-change-control ${isMouseMoving?"enviroment-change-control-active":""} ${enviromentSelected===item.id?"enviroment-change-control-selected":""}`} 
+                      className = {`enviroment-change-control ${isMouseMoving?"enviroment-change-control-active":""} ${sectionSelected===item.id?"enviroment-change-control-selected":""}`} 
                       key={index} 
                       style={{left:`${item.control.x}`,top:`${item.control.y}`}}
                       onClick={()=>handleEnviroment(item)}
@@ -157,10 +171,13 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
           <div className='editor-sidebar-content'>
             <div className='textures-container'>
               <Row gutter={[16, 16]}>
-                {enviromentSelected && data.images.filter((item)=>(item.controlId===enviromentSelected)).map((item, index) => (
+                {sectionSelected && data.images.filter((item)=>(item.controlId===sectionSelected)).map((item, index) => (
                   <Col key={index} xs={8} sm={8} md={8} lg={8}>
-                    <div className='texture-item-container' onClick={()=>handleTexture(item)}>
-                      <img src={item.textureUrl} alt=""/>
+                    <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
+                      <div className='texture-data'>
+                        <h5>{item.title}</h5>
+                      </div>
+                      <img src={item.textureUrl} alt="" loading="lazy"/>
                     </div>
                   </Col>
                 ))}
