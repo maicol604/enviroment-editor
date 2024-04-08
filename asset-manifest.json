@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/enviroment-editor/static/css/main.29ccb82f.css",
-    "main.js": "/enviroment-editor/static/js/main.7c96ed6d.js",
+    "main.css": "/enviroment-editor/static/css/main.b42ce7be.css",
+    "main.js": "/enviroment-editor/static/js/main.cded4ccb.js",
     "static/js/787.93e00141.chunk.js": "/enviroment-editor/static/js/787.93e00141.chunk.js",
     "static/media/Fondo.png": "/enviroment-editor/static/media/Fondo.2981d5e25765c485181d.png",
     "static/media/habitacion_0000_melamina-1-01.png": "/enviroment-editor/static/media/habitacion_0000_melamina-1-01.0b7d230d3f544376bea2.png",
@@ -18,12 +18,12 @@
     "static/media/habitacion_0007_melamina-3-02.png": "/enviroment-editor/static/media/habitacion_0007_melamina-3-02.1f7b685915c61fe73c73.png",
     "static/media/habitacion_0008_melamina-3-03.png": "/enviroment-editor/static/media/habitacion_0008_melamina-3-03.0fca99554eab3d7c751a.png",
     "index.html": "/enviroment-editor/index.html",
-    "main.29ccb82f.css.map": "/enviroment-editor/static/css/main.29ccb82f.css.map",
-    "main.7c96ed6d.js.map": "/enviroment-editor/static/js/main.7c96ed6d.js.map",
+    "main.b42ce7be.css.map": "/enviroment-editor/static/css/main.b42ce7be.css.map",
+    "main.cded4ccb.js.map": "/enviroment-editor/static/js/main.cded4ccb.js.map",
     "787.93e00141.chunk.js.map": "/enviroment-editor/static/js/787.93e00141.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.29ccb82f.css",
-    "static/js/main.7c96ed6d.js"
+    "static/css/main.b42ce7be.css",
+    "static/js/main.cded4ccb.js"
   ]
 }
