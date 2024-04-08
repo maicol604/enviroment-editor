@@ -45,21 +45,73 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [isMouseMoving, setIsMouseMoving] = useState(false);
   const [sectionSelected, setSectionSelected] = useState("");
   const [controls, setControls] = useState<any>([]);
+  const [textures, setTextures] = useState<any>([]);
 
   const { state, dispatch } = useAppContext();
 
+  // {
+  //   id:"0",
+  //   url:require('./assets/images/sampleImages/habitacion_0000_melamina-1-01.png'), 
+  //   textureUrl:require('./assets/images/sampleImages/habitacion_0000_melamina-1-01.png'), 
+  //   title:"text test 1 1 1",
+  //   controlId:"1",
+  //   category:"",
+  //   sizes:{
+  //     h:"",
+  //     w:""
+  //   }
+  // },
+
   useEffect(()=>{
     // console.log("enviroments data")
-    let cpy = state.environments.map((env:any) => ({
-      ...env,
-      name: env.title,
-      id: env.id,
-      thumbnail: env.thumbnail,
-      coordinates: JSON.parse(env.metadata.custom_post_type_coordinates),
-    }));
-    setControls(JSON.parse(state.enviromentSelected.metadata.custom_post_type_coordinates));
-    console.log('here',cpy);
-  },[state])
+    // let cpy = state.environments.map((env:any) => ({
+    //   ...env,
+    //   name: env.title,
+    //   id: env.id,
+    //   thumbnail: env.thumbnail,
+    //   coordinates: JSON.parse(env.metadata.custom_post_type_coordinates),
+    // }));
+
+    let texturesArray:any = [];
+    for(let i=0;i<state.enviromentSelected.textures.length;i++){
+      console.log(state.enviromentSelected.textures[i])
+      // for(let j=0;j<state.enviromentSelected.textures.textures.length;j++){
+
+      // }
+      let texturesCpy = state.enviromentSelected.textures[i].textures.map((texture:any, index:number)=>({
+        id: index+""+i,
+        title: texture.name,
+        textureUrl: state.enviromentSelected.textures[i].texture,
+        url:texture.texture,
+        controlId:texture.control_id,
+        category:"",
+        sizes:{
+          h:"",
+          w:""
+        }
+      }));
+      texturesArray = [...texturesArray, ...texturesCpy]
+    }
+
+    // let texturesCpy = state.enviromentSelected.textures.map((texture:any, index:number)=>({
+    //   id: index,
+    //   title: texture.name,
+    //   textureUrl: texture.texture,
+    //   url:texture.texture,
+    //   controlId:1,
+    //   category:"",
+    //   sizes:{
+    //     h:"",
+    //     w:""
+    //   }
+    // }));
+
+    console.log('texture',texturesArray);
+
+    setTextures(texturesArray);
+    setControls(JSON.parse(state.enviromentSelected.metadata.custom_post_type_coordinates).map((item:any, index:any)=>({x:item.x, y:item.y, id:(index+1)})));
+    // console.log('here',cpy);
+  },[state]);
 
   useEffect(() => {
     let timeoutId: any;
@@ -75,6 +127,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
         setIsMouseMoving(false);
       }, 2000); 
     };
+    
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
@@ -106,14 +159,22 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   }
 
   const handleEnviroment = (data: any) => {
+    console.log(data)
     setSectionSelected(data.id);
     setOption(2);
     setOpenSidebar(true);
   }
 
   const handleOption = (option: any) => {
+    console.log(option)
     setOpenSidebar(true);
     setOption(option);
+  }
+
+  const handleSelectedEnviroment = (env:any) => {
+    // console.log(env);
+    dispatch({ type: 'SET_ENVIRONMENT', payload: env });
+    setSelectedTextures([]);
   }
 
   return (
@@ -187,8 +248,25 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
           </div>
           <div className='editor-sidebar-content'>
             <div className='textures-container'>
-              <Row gutter={[16, 16]}>
-                {sectionSelected && data.images.filter((item)=>(item.controlId===sectionSelected)).map((item, index) => (
+              {
+              option === 1 &&
+              <Row gutter={[16, 16]} className='w-full'>
+                {sectionSelected && state.environments.map((item:any, index:any) => (
+                  <Col key={index} xs={24} sm={24} md={24} lg={24}>
+                    <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                      <div className='texture-data'>
+                        <h5>{item.title}</h5>
+                      </div>
+                      <img src={item.thumbnail} alt="" loading="lazy"/>
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+              }
+              {
+              option === 2 &&
+              <Row gutter={[16, 16]} className='w-full'>
+                {sectionSelected && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
                   <Col key={index} xs={8} sm={8} md={8} lg={8}>
                     <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
                       <div className='texture-data'>
@@ -199,6 +277,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                   </Col>
                 ))}
               </Row>
+              }
             </div>
           </div>
         </div>
