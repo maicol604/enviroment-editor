@@ -1,32 +1,42 @@
 // EnvironmentGrid.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import Environment from '../Environment';
+import { useAppContext } from '../../Context';
 
-interface EnvironmentData {
-  id: number;
-  name: string;
-  thumbnail: any;
+interface EnvironmentProps {
+  onChange: any
 }
+const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
 
-const EnvironmentGrid: React.FC = () => {
-  const environmentsData: EnvironmentData[] = [
-    { id: 1, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 2, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 3, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 4, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 5, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 6, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 7, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    { id: 8, name: 'Environment 1', thumbnail: require('../../assets/images/A2_MINIATURA.webp') },
-    // ... más datos
-  ];
+  const { state, dispatch } = useAppContext();
+  const [enviroments, setEnviroments] = useState<any[]>([]);
+
+  useEffect(()=> {
+    let envCpy = state.environments.map(env => ({
+      name: env.title,
+      id: env.id,
+      thumbnail: env.thumbnail,
+      ...env
+    }));
+    setEnviroments([...envCpy]);
+    console.log(state);
+  },[state])
+
+  const handleClick = (e:any) => {
+    // console.log(e)
+    onChange(e);
+    dispatch({ type: 'SET_ENVIRONMENT', payload: e });
+  }
 
   return (
     <Row gutter={[16, 16]}>
-      {environmentsData.map((environment) => (
+      {enviroments.map((environment) => (
         <Col key={environment.id} xs={24} sm={12} md={8} lg={6}>
-          <Environment data={environment} />
+          <Environment 
+            data={environment} 
+            onClick={handleClick}  
+          />
         </Col>
       ))}
     </Row>

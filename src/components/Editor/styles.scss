@@ -4,6 +4,9 @@
     overflow: hidden;
     height: 100vh;
     background-color: #000;
+    .front-img {
+        z-index: 100000;
+    }
     .enviroment-container {
         position: relative;
         margin-top: auto;
@@ -25,6 +28,7 @@
                 position: absolute;
                 max-height: 100vh;
                 object-fit: contain;
+                pointer-events: none;
             }
             .img-layer {
                 opacity: 0;
@@ -85,13 +89,16 @@
         transition: all .25s;
         display: flex;
         .sidebar-controls {
-            width: 4rem;
-            background-color: rgba(255,255,255,.5);
+            color: #292D32;
+            width: 2.5rem;
+            background-color: rgba(255,255,255,1);
             height: fit-content;
-            left: -4rem;
+            left: -5rem;
             position: absolute;
             top: 50vh;
             transform: translateY(-50%);
+            border-radius: 10rem;
+            overflow: hidden;
             ul {
                 list-style: none;
                 margin: 0;
@@ -99,7 +106,7 @@
                 li {
                     transition: all .25s;
                     >div {
-                        width: 4rem;
+                        width: 2.5rem;
                         height: 4rem;
                         font-size: 1.5rem;
                         cursor: pointer;
@@ -109,15 +116,16 @@
                     }
                 }
                 li:hover {
-                    color: #000;
-                    background-color: rgba(255,255,255,.5);
+                    color: #02ADEE;
+                    background-color: rgba(255,255,255, 1);
                 }
                 .active {
-                    background-color: rgba(0,0,0,1);
+                    background-color: #02ADEE;
                     color: #fff;
+                    border-radius: 10rem;
                 }
                 li.active:hover {
-                    background-color: rgba(0,0,0,1);
+                    background-color: #02ADEE;
                     color: #fff;
                 }
             }
@@ -147,6 +155,9 @@
         cursor: pointer;
         border: 4px solid rgba(0,0,0,0);
         box-sizing: border-box;
+        position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
         position: relative;
         img {
             width: 100%;
@@ -182,9 +193,16 @@
             }
         }
     }
-    .texture-item-selected {
-        border: 4px solid #000;
-        box-sizing: border-box;
+    .texture-item-selected::after{
+        content: "";
+        width: 100%;
+        height: .5rem;
+        background: #02ADEE;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        // border: 4px solid #02ADEE;
+        // box-sizing: border-box;
         img {
         }
     }

@@ -2,22 +2,25 @@ import './App.css';
 import { AppProvider } from './Context';
 import EnvironmentGrid from './components/EnvironmentGrid';
 import Editor from './components/Editor';
+import { useState } from 'react';
 
 
 function App() {
   
-  const originalEnviroment = require('./assets/images/sampleImages/i1.png');
-  const backImage = require('./assets/images/sampleImages/i1.png');
-  const frontImage = require('./assets/images/sampleImages/i4-s.png');
+  const [view, setView] = useState<any>(0);
+
+  const originalEnviroment = require('./assets/images/sampleImages/Fondo.png');
+  const backImage = require('./assets/images/sampleImages/Fondo.png');
+  const frontImage = require('./assets/images/sampleImages/Objetos.png');
 
   const controls = [
-    // {
-    //   control: {
-    //     x:"10%",
-    //     y:"25%"
-    //   },
-    //   id:"1",
-    // },
+    {
+      control: {
+        x:"20%",
+        y:"25%"
+      },
+      id:"1",
+    }, 
     {
       control: {
         x:"60%",
@@ -37,10 +40,10 @@ function App() {
   const images = [
     {
       id:"0",
-      url:require('./assets/images/sampleImages/i2.png'), 
-      textureUrl:require('./assets/images/sampleImages/t2.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0000_melamina-1-01.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0000_melamina-1-01.png'), 
       title:"text test 1 1 1",
-      controlId:"2",
+      controlId:"1",
       category:"",
       sizes:{
         h:"",
@@ -49,69 +52,100 @@ function App() {
     }, 
     {
       id:"1",
-      url:require('./assets/images/sampleImages/i3.png'), 
-      textureUrl:require('./assets/images/sampleImages/t3.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0001_melamina-1-02.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0001_melamina-1-02.png'), 
+      title:"text",
+      controlId:"1",
+    },
+    {
+      id:"2",
+      url:require('./assets/images/sampleImages/habitacion_0002_melamina-1-03.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0002_melamina-1-03.png'), 
       title:"text",
       controlId:"2",
     },
     {
-      id:"2",
-      url:require('./assets/images/sampleImages/i4.png'), 
-      textureUrl:require('./assets/images/sampleImages/t4.png'), 
-      title:"text",
-      controlId:"3",
-    },
-    {
       id:"3",
-      url:require('./assets/images/sampleImages/i5.png'), 
-      textureUrl:require('./assets/images/sampleImages/t5.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0003_melamina-2-01.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0003_melamina-2-01.png'), 
       title:"text",
-      controlId:"3",
+      controlId:"2",
     },
     {
       id:"4",
-      url:require('./assets/images/sampleImages/i6.png'), 
-      textureUrl:require('./assets/images/sampleImages/t6.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0004_melamina-2-02.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0004_melamina-2-02.png'), 
       title:"text",
-      controlId:"3",
+      controlId:"2",
     },
     {
       id:"7",
-      url:require('./assets/images/sampleImages/i7.png'), 
-      textureUrl:require('./assets/images/sampleImages/t7.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0005_melamina-2-03.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0005_melamina-2-03.png'), 
       title:"text",
       controlId:"2",
     },
     {
       id:"5",
-      url:require('./assets/images/sampleImages/i8.png'), 
-      textureUrl:require('./assets/images/sampleImages/t8.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0006_melamina-3-01.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0006_melamina-3-01.png'), 
       title:"text",
       controlId:"3",
     },
     {
       id:"6",
-      url:require('./assets/images/sampleImages/i10.png'), 
-      textureUrl:require('./assets/images/sampleImages/t10.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0007_melamina-3-02.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0007_melamina-3-02.png'), 
       title:"text",
       controlId:"3",
     },
     {
       id:"8",
-      url:require('./assets/images/sampleImages/i9.png'), 
-      textureUrl:require('./assets/images/sampleImages/t9.png'), 
+      url:require('./assets/images/sampleImages/habitacion_0008_melamina-3-03.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0008_melamina-3-03.png'), 
       title:"text",
       controlId:"2",
-    }
+    },
+    {
+      id:"9",
+      url:require('./assets/images/sampleImages/habitacion_0009_melamina-4-01.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0009_melamina-4-01.png'), 
+      title:"text",
+      controlId:"2",
+    },
+    {
+      id:"10",
+      url:require('./assets/images/sampleImages/habitacion_0010_melamina-4-03.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0010_melamina-4-03.png'), 
+      title:"text",
+      controlId:"2",
+    },
+    {
+      id:"11",
+      url:require('./assets/images/sampleImages/habitacion_0011_melamina-4-02.png'), 
+      textureUrl:require('./assets/images/sampleImages/habitacion_0011_melamina-4-02.png'), 
+      title:"text",
+      controlId:"2",
+    },
   ];
+
+  const handleEnviroment = () => {
+    setView(1);
+  }
 
   return (
     <AppProvider>
       <div className="App">
-        {/* <EnvironmentGrid/> */}
-        <Editor
-          data ={{frontImage, backImage, originalEnviroment, images, controls}}
-        />
+        {view===0 &&
+          <EnvironmentGrid
+            onChange = {handleEnviroment}
+          />
+        }
+        {view===1 &&
+          <Editor
+            data ={{frontImage, backImage, originalEnviroment, images, controls}}
+          />
+        }
       </div>
     </AppProvider>
   );

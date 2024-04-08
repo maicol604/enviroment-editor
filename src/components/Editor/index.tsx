@@ -10,6 +10,7 @@ import {
   FormOutlined
 } from '@ant-design/icons';
 import ImageLoader from '../ImageLoader';
+import { useAppContext } from '../../Context';
 
 interface Image {
   id: string;
@@ -43,6 +44,22 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [option, setOption] = useState<any>(null);
   const [isMouseMoving, setIsMouseMoving] = useState(false);
   const [sectionSelected, setSectionSelected] = useState("");
+  const [controls, setControls] = useState<any>([]);
+
+  const { state, dispatch } = useAppContext();
+
+  useEffect(()=>{
+    // console.log("enviroments data")
+    let cpy = state.environments.map((env:any) => ({
+      ...env,
+      name: env.title,
+      id: env.id,
+      thumbnail: env.thumbnail,
+      coordinates: JSON.parse(env.metadata.custom_post_type_coordinates),
+    }));
+    setControls(JSON.parse(state.enviromentSelected.metadata.custom_post_type_coordinates));
+    console.log('here',cpy);
+  },[state])
 
   useEffect(() => {
     let timeoutId: any;
@@ -105,7 +122,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
         <div className='enviroment-container'>
             <div className='editor-wrapper'>
               <ImageLoader src={data.originalEnviroment} alt="" className='original-enviroment' loading="lazy"/>
-              <ImageLoader src={data.backImage} alt="Back Image" className='img-bg' loading="lazy"/>
+              <ImageLoader src={state.enviromentSelected.background_image} alt="Back Image" className='img-bg' loading="lazy"/>
               {selectedTextures.map((item, index) => (
                   <ImageLoader 
                     className='img-layer'
@@ -115,14 +132,14 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                     loading="lazy"
                   />
               ))}
-              <ImageLoader src={data.frontImage} alt="Front Image" loading="lazy"/>
+              <ImageLoader src={state.enviromentSelected.front_image} alt="Front Image" loading="lazy" className='front-img'/>
               {
-                data.controls.map((item, index)=> {
+                controls.map((item:any, index:any)=> {
                   return (
                     <button 
                       className = {`enviroment-change-control ${isMouseMoving?"enviroment-change-control-active":""} ${sectionSelected===item.id?"enviroment-change-control-selected":""}`} 
                       key={index} 
-                      style={{left:`${item.control.x}`,top:`${item.control.y}`}}
+                      style={{left:`${item.x}%`,top:`${item.y}%`}}
                       onClick={()=>handleEnviroment(item)}
                     >
                       <FormOutlined />

@@ -7,12 +7,13 @@ interface EnvironmentProps {
     id: number;
     name: string;
     thumbnail: any;
-  };
+  },
+  onClick: any
 }
 
-const Environment: React.FC<EnvironmentProps> = ({ data }) => {
+const Environment: React.FC<EnvironmentProps> = ({ data, onClick }) => {
   return (
-    <div className='enviroment-container'>
+    <div className='enviroment-container' onClick={()=>onClick(data)}>
       <img src={data.thumbnail}/>
       <div className='enviroment-data'>
         <span>{ data.name }</span>
