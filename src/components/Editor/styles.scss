@@ -7,6 +7,32 @@
     .front-img {
         z-index: 1000;
     }
+    .sumary-item {
+        display: flex;
+        .sumary-item-img-wrapper {
+            display: flex;
+            width: 50%;
+            img {
+                width: 100%;
+                overflow: hidden;
+                object-fit: cover;
+            }
+        }
+        .sumary-item-content {
+            display: flex;
+            flex-direction: column;
+            margin-left: 1rem;
+            align-items: flex-start;
+            .texture-title {
+                text-transform: capitalize;
+                margin-bottom: .5rem;
+                font-weight: 700;
+                padding-bottom: .25rem;
+                border-bottom: 1px solid #000;
+                width: 100%;
+            }
+        }
+    }
     .enviroment-container {
         position: relative;
         margin-top: auto;

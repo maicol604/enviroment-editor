@@ -44,10 +44,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://texturizador.estudiomarketech.es/wp-json/custom/v1/environments/");
+        // Generar un número aleatorio para el parámetro de consulta
+        const randomQuery = Math.random().toString(36).substring(7);
+        const url = `https://texturizador.estudiomarketech.es/wp-json/custom/v1/environments/?random=${randomQuery}`;
+        
+        const response = await fetch(url);
         if (response.ok) {
           const environments = await response.json();
-          let envCpy = [...environments,];
+          let envCpy = [...environments];
           console.log(environments, envCpy)
           dispatch({ type: 'SET_ENVIRONMENTS', payload: envCpy });
         } else {
@@ -58,7 +62,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       }
     };
     fetchData();
-  }, []); // El array vacío [] asegura que el efecto solo se ejecute una vez al montar el componente
+  }, []);
+  
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 };

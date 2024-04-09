@@ -43,7 +43,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [option, setOption] = useState<any>(null);
   const [isMouseMoving, setIsMouseMoving] = useState(false);
-  const [sectionSelected, setSectionSelected] = useState("");
+  const [sectionSelected, setSectionSelected] = useState("1");
   const [controls, setControls] = useState<any>([]);
   const [textures, setTextures] = useState<any>([]);
 
@@ -88,7 +88,9 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
         sizes:{
           h:"",
           w:""
-        }
+        },
+        ...texture,
+        ...state.enviromentSelected.textures[i],
       }));
       texturesArray = [...texturesArray, ...texturesCpy]
     }
@@ -151,7 +153,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     } else {
       setSelectedTextures([...selectedTextures, image]);
     }
-    console.log(selectedTextures);
+    console.log('selectedTextures',selectedTextures);
   };
 
   const handleSidebar = () => {
@@ -159,7 +161,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   }
 
   const handleEnviroment = (data: any) => {
-    console.log(data)
+    // console.log(data)
     setSectionSelected(data.id);
     setOption(2);
     setOpenSidebar(true);
@@ -175,6 +177,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     // console.log(env);
     dispatch({ type: 'SET_ENVIRONMENT', payload: env });
     setSelectedTextures([]);
+    setSectionSelected("1");
   }
 
   return (
@@ -270,9 +273,25 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                   <Col key={index} xs={8} sm={8} md={8} lg={8}>
                     <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
                       <div className='texture-data'>
-                        <h5>{item.title}</h5>
+                        <h5>{item.name}</h5>
                       </div>
                       <img src={item.textureUrl} alt="" loading="lazy"/>
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+              }
+              {
+              option === 3 &&
+              <Row gutter={[16, 16]} className='w-full'>
+                {sectionSelected && selectedTextures.map((item:any, index:any) => (
+                  <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
+                    <div className='sumary-item-img-wrapper'>
+                      <img src={item.textureUrl} alt="" loading="lazy"/>
+                    </div>
+                    <div className='sumary-item-content'>
+                      <span className='texture-title'>{item.title}</span>
+                      <span>{item.name}</span>
                     </div>
                   </Col>
                 ))}
