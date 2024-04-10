@@ -119,7 +119,7 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
             </Col>
             :
             (
-              (environment.labels !== null && environment.labels.find((obj:any)=>(new RegExp(searchValue, "i").test(obj.name)))) ?
+              (environment.labels && environment.labels.find((obj:any)=>(new RegExp(searchValue, "i").test(obj.name)))) ?
                 <Col key={environment.id} xs={24} sm={12} md={8} lg={8}>
                   <Environment 
                     data={environment} 
