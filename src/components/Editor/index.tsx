@@ -286,7 +286,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
               <Row gutter={[16, 16]} className='w-full'>
                 {sectionSelected && selectedTextures.map((item:any, index:any) => (
                   <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
-                    <div className='sumary-item-img-wrapper'>
+                    <div className='sumary-item-img-wrapper rounded-1rem'>
                       <img src={item.textureUrl} alt="" loading="lazy"/>
                     </div>
                     <div className='sumary-item-content'>

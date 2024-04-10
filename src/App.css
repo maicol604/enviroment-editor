@@ -39,6 +39,9 @@
 .w-full {
   width: 100%;
 }
-.radius-1rem {
+.radius-1rem, .rounded-1rem {
   border-radius: 1rem;
+}
+.rounded-1rem {
+  overflow: hidden;
 }
