@@ -52,7 +52,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         if (response.ok) {
           const environments = await response.json();
           let envCpy = [...environments];
-          console.log(environments, envCpy)
+          // console.log(environments, envCpy)
           dispatch({ type: 'SET_ENVIRONMENTS', payload: envCpy });
         } else {
           console.error('Error al obtener las environments:', response.statusText);

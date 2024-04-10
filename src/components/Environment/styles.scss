@@ -34,3 +34,9 @@
         background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,.5) 80%); 
     }
 }
+.enviroment-grid-item {
+    height: 30vh;
+    img {
+        object-fit: cover;
+    }
+}

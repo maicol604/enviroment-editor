@@ -1,12 +1,12 @@
 // EnvironmentGrid.tsx
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
+import { Select } from 'antd';
 import Environment from '../Environment';
 import { useAppContext } from '../../Context';
 import './styles.scss';
-import { SearchOutlined } from '@ant-design/icons';
-import { Select } from 'antd';
 
 interface EnvironmentProps {
   onChange: any
@@ -30,7 +30,7 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
     
     let categoriesCpy:any = [];
     for(let i=0;i<envCpy.length;i++) {
-      console.log(envCpy[i].enviroment_category)
+      // console.log(envCpy[i].enviroment_category)
       if(envCpy[i].enviroment_category)
         for(let j=0;j<envCpy[i].enviroment_category.length;j++) {
           if(!termIdExists(envCpy[i].enviroment_category[j].term_id, categoriesCpy)) {
@@ -94,13 +94,17 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
         {
           (categorySelected !== null) ? 
           enviroments.map((environment) => (
-            (environment.enviroment_category !== null && environment.enviroment_category.find((obj:any)=>(obj.term_id === categorySelected))) ?
+            (environment.enviroment_category) ?
+            ((environment.enviroment_category.find((obj:any)=>(obj.term_id === categorySelected))) ?
             <Col key={environment.id} xs={24} sm={12} md={8} lg={8}>
               <Environment 
                 data={environment} 
-                onClick={handleClick}  
+                onClick={handleClick}
               />
             </Col>
+            :
+            <></>
+            )
             :
             <></>
           ))

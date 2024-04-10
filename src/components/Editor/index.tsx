@@ -11,6 +11,8 @@ import {
 } from '@ant-design/icons';
 import ImageLoader from '../ImageLoader';
 import { useAppContext } from '../../Context';
+import { SearchOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
 
 interface Image {
   id: string;
@@ -46,6 +48,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [sectionSelected, setSectionSelected] = useState("1");
   const [controls, setControls] = useState<any>([]);
   const [textures, setTextures] = useState<any>([]);
+  const [textureSearch, setTextureSearch] = useState<string>("");
 
   const { state, dispatch } = useAppContext();
 
@@ -74,7 +77,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
 
     let texturesArray:any = [];
     for(let i=0;i<state.enviromentSelected.textures.length;i++){
-      console.log(state.enviromentSelected.textures[i])
+      // console.log(state.enviromentSelected.textures[i])
       // for(let j=0;j<state.enviromentSelected.textures.textures.length;j++){
 
       // }
@@ -108,7 +111,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     //   }
     // }));
 
-    console.log('texture',texturesArray);
+    // console.log('texture',texturesArray);
 
     setTextures(texturesArray);
     setControls(JSON.parse(state.enviromentSelected.metadata.custom_post_type_coordinates).map((item:any, index:any)=>({x:item.x, y:item.y, id:(index+1)})));
@@ -153,7 +156,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     } else {
       setSelectedTextures([...selectedTextures, image]);
     }
-    console.log('selectedTextures',selectedTextures);
+    // console.log('selectedTextures',selectedTextures);
   };
 
   const handleSidebar = () => {
@@ -168,7 +171,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   }
 
   const handleOption = (option: any) => {
-    console.log(option)
+    // console.log(option)
     setOpenSidebar(true);
     setOption(option);
   }
@@ -178,6 +181,10 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     dispatch({ type: 'SET_ENVIRONMENT', payload: env });
     setSelectedTextures([]);
     setSectionSelected("1");
+  }
+
+  const handleTextureSearch = (e:any) => {
+    setTextureSearch(e.target.value);
   }
 
   return (
@@ -196,7 +203,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                     loading="lazy"
                   />
               ))}
-              <ImageLoader src={state.enviromentSelected.front_image} alt="Front Image" loading="lazy" className='front-img'/>
+              <ImageLoader src={state.enviromentSelected.front_image} alt="" loading="lazy" className='front-img'/>
               {
                 controls.map((item:any, index:any)=> {
                   return (
@@ -256,7 +263,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
               <Row gutter={[16, 16]} className='w-full'>
                 {sectionSelected && state.environments.map((item:any, index:any) => (
                   <Col key={index} xs={24} sm={24} md={24} lg={24}>
-                    <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                    <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
                       <div className='texture-data'>
                         <h5>{item.title}</h5>
                       </div>
@@ -268,34 +275,64 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
               }
               {
               option === 2 &&
-              <Row gutter={[2, 2]} className='w-full'>
-                {sectionSelected && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
-                  <Col key={index} xs={8} sm={8} md={8} lg={8}>
-                    <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
-                      <div className='texture-data'>
-                        <h5>{item.name}</h5>
-                      </div>
-                      <img src={item.textureUrl} alt="" loading="lazy"/>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
+              <div>
+                <div className='sidebar-header'>
+                  <Input addonBefore={<SearchOutlined />} placeholder="Search" onChange={handleTextureSearch} />
+                </div>
+                <Row gutter={[2, 2]} className='w-full'>
+                  {(textureSearch === "") ?
+                    <>
+                      {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
+                        <Col key={index} xs={8} sm={8} md={8} lg={8}>
+                          <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
+                            {/* <div className='texture-data'>
+                              <h5>{item.name}</h5>
+                            </div> */}
+                            <img src={item.textureUrl} alt="" loading="lazy"/>
+                          </div>
+                        </Col>
+                      ))}
+                    </>
+                    :
+                    <>
+                      {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
+                        (item.texture_information.category.find((obj:any)=>(new RegExp(textureSearch, "i").test(obj.name)))) ?
+                        <Col key={index} xs={8} sm={8} md={8} lg={8}>
+                          <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
+                            {/* <div className='texture-data'>
+                              <h5>{item.name}</h5>
+                            </div> */}
+                            <img src={item.textureUrl} alt="" loading="lazy"/>
+                          </div>
+                        </Col>
+                        :
+                        <></>
+                      ))}
+                    </>
+                  }
+                </Row>
+              </div>
               }
               {
               option === 3 &&
-              <Row gutter={[16, 16]} className='w-full'>
-                {sectionSelected && selectedTextures.map((item:any, index:any) => (
-                  <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
-                    <div className='sumary-item-img-wrapper rounded-1rem'>
-                      <img src={item.textureUrl} alt="" loading="lazy"/>
-                    </div>
-                    <div className='sumary-item-content'>
-                      <span className='texture-title'>{item.title}</span>
-                      <span>{item.name}</span>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
+              <div>
+                <div className='sidebar-header'>
+                  <h3>Summary</h3>
+                </div>
+                <Row gutter={[16, 16]} className='w-full'>
+                  {sectionSelected && selectedTextures.map((item:any, index:any) => (
+                    <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
+                      <div className='sumary-item-img-wrapper rounded-1rem'>
+                        <img src={item.textureUrl} alt="" loading="lazy"/>
+                      </div>
+                      <div className='sumary-item-content'>
+                        <span className='texture-title'>{item.title}</span>
+                        <span>{item.name}</span>
+                      </div>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
               }
             </div>
           </div>
