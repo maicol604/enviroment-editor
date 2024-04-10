@@ -32,7 +32,7 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
   return (
     <Row gutter={[16, 16]}>
       {enviroments.map((environment) => (
-        <Col key={environment.id} xs={24} sm={12} md={8} lg={6}>
+        <Col key={environment.id} xs={24} sm={12} md={8} lg={8}>
           <Environment 
             data={environment} 
             onClick={handleClick}  

@@ -268,7 +268,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
               }
               {
               option === 2 &&
-              <Row gutter={[16, 16]} className='w-full'>
+              <Row gutter={[2, 2]} className='w-full'>
                 {sectionSelected && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
                   <Col key={index} xs={8} sm={8} md={8} lg={8}>
                     <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>

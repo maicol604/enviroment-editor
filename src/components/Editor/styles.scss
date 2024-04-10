@@ -59,6 +59,7 @@
             .img-layer {
                 opacity: 0;
                 animation: fadeIn .25s ease-in-out forwards;
+                display: block !important;
             }
             .img-bg {
                 position: relative !important;

@@ -39,3 +39,6 @@
 .w-full {
   width: 100%;
 }
+.radius-1rem {
+  border-radius: 1rem;
+}

@@ -19,7 +19,7 @@ const ImageLoader: React.FC<ImageLoaderProps> = (props) => {
         <React.Fragment>
             <img
                 {...props}  
-                style={{ display: imageLoaded ? 'inline-block' : 'none' }}
+                style={{ display: imageLoaded ? 'inline-block' : 'inline-block' }}
                 onLoad={handleImageLoad}
             />
         </React.Fragment>
