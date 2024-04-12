@@ -13,6 +13,7 @@ import ImageLoader from '../ImageLoader';
 import { useAppContext } from '../../Context';
 import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
+import { Select } from 'antd';
 
 interface Image {
   id: string;
@@ -49,6 +50,9 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [controls, setControls] = useState<any>([]);
   const [textures, setTextures] = useState<any>([]);
   const [textureSearch, setTextureSearch] = useState<string>("");
+  const [enviromentSearch, setEnviromentSearch] = useState<string>("");
+  const [categories, setCategories] = useState<any[]>([]);
+  const [categorySelected, setCategorySelected] = useState<any>(null);
 
   const { state, dispatch } = useAppContext();
 
@@ -64,6 +68,36 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   //     w:""
   //   }
   // },
+
+  const termIdExists = (termId:any, objectArray:[]) => {
+    // console.log("onj",objectArray.find((obj:any) => obj.term_id === termId),termId, objectArray)
+    return objectArray.find((obj:any) => obj.term_id === termId)?true:false;
+  }
+
+  useEffect(()=>{
+    let envCpy = state.environments.map(env => ({
+      name: env.title,
+      id: env.id,
+      thumbnail: env.thumbnail,
+      ...env
+    }));
+    let categoriesCpy:any = [];
+    for(let i=0;i<envCpy.length;i++) {
+      // console.log(envCpy[i].enviroment_category)
+      if(envCpy[i].enviroment_category)
+        for(let j=0;j<envCpy[i].enviroment_category.length;j++) {
+          if(!termIdExists(envCpy[i].enviroment_category[j].term_id, categoriesCpy)) {
+            categoriesCpy.push(envCpy[i].enviroment_category[j]);
+          }
+        }
+    }
+    categoriesCpy = categoriesCpy.map((item:any)=>({
+      ...item,
+      value: item.term_id,
+      label: item.name.charAt(0).toUpperCase() + item.name.slice(1)
+    }))
+    setCategories(categoriesCpy)
+  },[])
 
   useEffect(()=>{
     // console.log("enviroments data")
@@ -187,8 +221,14 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     setTextureSearch(e.target.value);
   }
 
+  const handleChange = (value: string) => {
+    setEnviromentSearch("");
+    setCategorySelected(value);
+  }
+
   const handleEnviromentSearch = (e:any) => {
-    console.log(e.target.value);
+    setEnviromentSearch(e.target.value);
+    setCategorySelected('-1');
   }
 
   return (
@@ -196,7 +236,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
       <div className='editor-container'>
         <div className='enviroment-container'>
             <div className='editor-wrapper'>
-              <ImageLoader src={data.originalEnviroment} alt="" className='original-enviroment' loading="lazy"/>
+              <ImageLoader src={state.enviromentSelected.background_image} alt="" className='original-enviroment' loading="lazy"/>
               <ImageLoader src={state.enviromentSelected.background_image} alt="Back Image" className='img-bg' loading="lazy"/>
               {selectedTextures.map((item, index) => (
                   <ImageLoader 
@@ -264,29 +304,82 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
             <div className='textures-container'>
               {
               option === 1 &&
-              <div>
+              <>
                 <div className='sidebar-header'>
-                  <Input addonBefore={<SearchOutlined />} placeholder="Search asd" onChange={handleEnviromentSearch} />
+                  <span>
+                    <Input addonBefore={<SearchOutlined />} placeholder="Search asd" onChange={handleEnviromentSearch} value={enviromentSearch}/>
+                  </span>
+                  <span>
+                    <Select
+                      value={categorySelected}
+                      defaultValue={'-1'}
+                      style={{ width: '100%' }}
+                      onChange={handleChange}
+                      options={[
+                        {
+                          value:'-1',
+                          label: "All"
+                        },
+                        ...categories
+                      ]}
+                    />
+                  </span>
                 </div>
                 <div className='sidebar-content '>
-                  <Row gutter={[16, 16]} className='w-full'>
-                    {sectionSelected && state.environments.map((item:any, index:any) => (
-                      <Col key={index} xs={24} sm={24} md={24} lg={24}>
-                        <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
-                          <div className='texture-data'>
-                            <h5>{item.title}</h5>
+                  <Row gutter={[0, 16]} className='w-full'>
+                    {
+                      (categorySelected !== '-1') ? 
+                      state.environments.map((item, index) => (
+                        (item.enviroment_category) ?
+                        ((item.enviroment_category.find((obj:any)=>(obj.term_id === categorySelected))) ?
+                        <Col key={index} xs={24} sm={24} md={24} lg={24}>
+                          <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                            <div className='texture-data'>
+                              <h5>{item.title}</h5>
+                            </div>
+                            <ImageLoader src={item.thumbnail} alt="" skeleton/>
                           </div>
-                          <ImageLoader src={item.thumbnail} alt="" skeleton/>
-                        </div>
-                      </Col>
-                    ))}
+                        </Col>
+                        :
+                        <></>
+                        )
+                        :
+                        <></>
+                      ))
+                      :
+                      (sectionSelected && state.environments.map((item:any, index:any) => (
+                        (enviromentSearch==="") ?
+                        <Col key={index} xs={24} sm={24} md={24} lg={24}>
+                          <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                            <div className='texture-data'>
+                              <h5>{item.title}</h5>
+                            </div>
+                            <ImageLoader src={item.thumbnail} alt="" skeleton/>
+                          </div>
+                        </Col>
+                        :
+                        (
+                          (item.labels && item.labels.find((obj:any)=>(new RegExp(enviromentSearch, "i").test(obj.name)))) ?
+                            <Col key={index} xs={24} sm={24} md={24} lg={24}>
+                              <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                                <div className='texture-data'>
+                                  <h5>{item.title}</h5>
+                                </div>
+                                <ImageLoader src={item.thumbnail} alt="" skeleton/>
+                              </div>
+                            </Col>
+                          :
+                            <></>
+                        )
+                      )))
+                    }
                   </Row>
                 </div>
-              </div>
+              </>
               }
               {
               option === 2 &&
-              <div>
+              <>
                 <div className='sidebar-header'>
                   <Input addonBefore={<SearchOutlined />} placeholder="Search asd" onChange={handleTextureSearch} />
                 </div>
@@ -322,11 +415,11 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                     </>
                   }
                 </Row>
-              </div>
+              </>
               }
               {
               option === 3 &&
-              <div>
+              <>
                 <div className='sidebar-header'>
                   <h3>Summary</h3>
                 </div>
@@ -343,7 +436,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                     </Col>
                   ))}
                 </Row>
-              </div>
+              </>
               }
             </div>
           </div>

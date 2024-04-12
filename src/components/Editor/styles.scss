@@ -79,7 +79,7 @@
                 width: 110%;
                 top: 0;
                 left: 0;
-                opacity: .5;
+                opacity: .25;
             }
             .enviroment-change-control {
                 position: absolute;
@@ -183,17 +183,28 @@
     display: flex;
     justify-content: center;
     position: relative;
+    flex-direction: column;
     max-height: calc(100vh - 2rem);
     .sidebar-header {
         margin-bottom: 1rem;
         padding: 1rem 0;
         position: static;
         top: 0;
+        > span {
+            margin-bottom: 1rem;
+            position: relative;
+            display: block;
+        }
+        > span:last-child {
+            margin-bottom: 0;
+        }
     }
     .sidebar-content {
         overflow-y: auto;
         display: flex;
         justify-content: center;
+        overflow-y: auto;
+        max-height: 100%;
     }
     .texture-item-container {
         width: 100%;

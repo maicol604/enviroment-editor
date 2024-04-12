@@ -58,7 +58,7 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
   }
 
   const handleSearch = (e:any) => {
-    setCategorySelected(null);
+    setCategorySelected('-1');
     setSearchValue(e.target.value)
   }
 
@@ -72,16 +72,17 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
       <div className='filter-section'>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={8} lg={8}>
-          <Input addonBefore={<SearchOutlined />} placeholder="Search" onChange={handleSearch} />
+          <Input addonBefore={<SearchOutlined />} placeholder="Search" onChange={handleSearch} value={searchValue}/>
         </Col>
         <Col xs={24} sm={12} md={8} lg={8}>
           <Select
-            defaultValue={null}
+            value={categorySelected}
+            defaultValue={'-1'}
             style={{ width: '100%' }}
             onChange={handleChange}
             options={[
               {
-                value:null,
+                value:'-1',
                 label: "All"
               },
               ...categories,
@@ -92,7 +93,7 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
       </div>
       <Row gutter={[16, 16]}>
         {
-          (categorySelected !== null) ? 
+          (categorySelected !== '-1') ? 
           enviroments.map((environment) => (
             (environment.enviroment_category) ?
             ((environment.enviroment_category.find((obj:any)=>(obj.term_id === categorySelected))) ?
