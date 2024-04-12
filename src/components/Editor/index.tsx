@@ -52,7 +52,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
   const [textureSearch, setTextureSearch] = useState<string>("");
   const [enviromentSearch, setEnviromentSearch] = useState<string>("");
   const [categories, setCategories] = useState<any[]>([]);
-  const [categorySelected, setCategorySelected] = useState<any>(null);
+  const [categorySelected, setCategorySelected] = useState<any>('-1');
 
   const { state, dispatch } = useAppContext();
 

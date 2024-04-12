@@ -16,7 +16,7 @@ const EnvironmentGrid: React.FC<EnvironmentProps> = ({ onChange }) => {
   const { state, dispatch } = useAppContext();
   const [enviroments, setEnviroments] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [categorySelected, setCategorySelected] = useState<any>(null);
+  const [categorySelected, setCategorySelected] = useState<any>('-1');
   const [searchValue, setSearchValue] = useState<string>("");
 
   useEffect(()=> {
