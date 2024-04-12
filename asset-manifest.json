@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/enviroment-editor/static/css/main.9caab1e5.css",
-    "main.js": "/enviroment-editor/static/js/main.42139a4e.js",
+    "main.js": "/enviroment-editor/static/js/main.55819d87.js",
     "static/js/787.93e00141.chunk.js": "/enviroment-editor/static/js/787.93e00141.chunk.js",
     "static/media/Fondo.png": "/enviroment-editor/static/media/Fondo.2981d5e25765c485181d.png",
     "static/media/habitacion_0000_melamina-1-01.png": "/enviroment-editor/static/media/habitacion_0000_melamina-1-01.0b7d230d3f544376bea2.png",
@@ -19,11 +19,11 @@
     "static/media/habitacion_0008_melamina-3-03.png": "/enviroment-editor/static/media/habitacion_0008_melamina-3-03.0fca99554eab3d7c751a.png",
     "index.html": "/enviroment-editor/index.html",
     "main.9caab1e5.css.map": "/enviroment-editor/static/css/main.9caab1e5.css.map",
-    "main.42139a4e.js.map": "/enviroment-editor/static/js/main.42139a4e.js.map",
+    "main.55819d87.js.map": "/enviroment-editor/static/js/main.55819d87.js.map",
     "787.93e00141.chunk.js.map": "/enviroment-editor/static/js/787.93e00141.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9caab1e5.css",
-    "static/js/main.42139a4e.js"
+    "static/js/main.55819d87.js"
   ]
 }
