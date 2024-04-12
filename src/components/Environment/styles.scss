@@ -36,6 +36,10 @@
 }
 .enviroment-grid-item {
     height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     img {
         object-fit: cover;
     }

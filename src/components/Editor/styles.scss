@@ -3,7 +3,7 @@
     max-width: 100%;
     overflow: hidden;
     height: 100vh;
-    background-color: #000;
+    background-color: #eee;
     .front-img {
         z-index: 1000;
     }
@@ -77,8 +77,8 @@
                 object-fit: cover;
                 height: 110vh;
                 width: 110%;
-                top: -5vh;
-                left: -5%;
+                top: 0;
+                left: 0;
                 opacity: .5;
             }
             .enviroment-change-control {
@@ -101,7 +101,7 @@
             .enviroment-change-control-active {
                 opacity: .75;
                 font-size: 1.5rem;
-                z-index: 100000;
+                z-index: 10;
             }
             .enviroment-change-control-selected {
                 color: #fff;
@@ -182,11 +182,18 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    max-height: 100vh;
-    overflow-y: auto;
+    position: relative;
+    max-height: calc(100vh - 2rem);
     .sidebar-header {
         margin-bottom: 1rem;
         padding: 1rem 0;
+        position: static;
+        top: 0;
+    }
+    .sidebar-content {
+        overflow-y: auto;
+        display: flex;
+        justify-content: center;
     }
     .texture-item-container {
         width: 100%;

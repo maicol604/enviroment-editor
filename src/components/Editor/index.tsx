@@ -187,6 +187,10 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
     setTextureSearch(e.target.value);
   }
 
+  const handleEnviromentSearch = (e:any) => {
+    console.log(e.target.value);
+  }
+
   return (
     <React.Fragment>
       <div className='editor-container'>
@@ -198,9 +202,9 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                   <ImageLoader 
                     className='img-layer'
                     src={item.url} 
-                    alt={item.title} 
-                    key={index} 
-                    loading="lazy"
+                    alt={""} 
+                    key={index+""+item.url} 
+                    skeleton={false}
                   />
               ))}
               <ImageLoader src={state.enviromentSelected.front_image} alt="" loading="lazy" className='front-img'/>
@@ -260,24 +264,31 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
             <div className='textures-container'>
               {
               option === 1 &&
-              <Row gutter={[16, 16]} className='w-full'>
-                {sectionSelected && state.environments.map((item:any, index:any) => (
-                  <Col key={index} xs={24} sm={24} md={24} lg={24}>
-                    <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
-                      <div className='texture-data'>
-                        <h5>{item.title}</h5>
-                      </div>
-                      <img src={item.thumbnail} alt="" loading="lazy"/>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
+              <div>
+                <div className='sidebar-header'>
+                  <Input addonBefore={<SearchOutlined />} placeholder="Search asd" onChange={handleEnviromentSearch} />
+                </div>
+                <div className='sidebar-content '>
+                  <Row gutter={[16, 16]} className='w-full'>
+                    {sectionSelected && state.environments.map((item:any, index:any) => (
+                      <Col key={index} xs={24} sm={24} md={24} lg={24}>
+                        <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                          <div className='texture-data'>
+                            <h5>{item.title}</h5>
+                          </div>
+                          <ImageLoader src={item.thumbnail} alt="" skeleton/>
+                        </div>
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
+              </div>
               }
               {
               option === 2 &&
               <div>
                 <div className='sidebar-header'>
-                  <Input addonBefore={<SearchOutlined />} placeholder="Search" onChange={handleTextureSearch} />
+                  <Input addonBefore={<SearchOutlined />} placeholder="Search asd" onChange={handleTextureSearch} />
                 </div>
                 <Row gutter={[2, 2]} className='w-full'>
                   {(textureSearch === "") ?
@@ -288,7 +299,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                             {/* <div className='texture-data'>
                               <h5>{item.name}</h5>
                             </div> */}
-                            <img src={item.textureUrl} alt="" loading="lazy"/>
+                            <ImageLoader src={item.textureUrl} alt="" skeleton/>
                           </div>
                         </Col>
                       ))}
@@ -302,7 +313,7 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
                             {/* <div className='texture-data'>
                               <h5>{item.name}</h5>
                             </div> */}
-                            <img src={item.textureUrl} alt="" loading="lazy"/>
+                            <ImageLoader src={item.textureUrl} alt="" skeleton/>
                           </div>
                         </Col>
                         :

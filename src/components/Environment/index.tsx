@@ -1,6 +1,7 @@
 // Environment.tsx
 import React from 'react';
 import './styles.scss';
+import ImageLoader from '../ImageLoader';
 
 interface EnvironmentProps {
   data: {
@@ -14,7 +15,7 @@ interface EnvironmentProps {
 const Environment: React.FC<EnvironmentProps> = ({ data, onClick }) => {
   return (
     <div className='enviroment-grid-item enviroment-container radius-1rem' onClick={()=>onClick(data)}>
-      <img src={data.thumbnail}/>
+      <ImageLoader src={data.thumbnail} skeleton/>
       <div className='enviroment-data'>
         <span>{ data.name }</span>
       </div>
