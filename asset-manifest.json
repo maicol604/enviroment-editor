@@ -1,29 +1,15 @@
 {
   "files": {
     "main.css": "/enviroment-editor/static/css/main.9caab1e5.css",
-    "main.js": "/enviroment-editor/static/js/main.55819d87.js",
+    "main.js": "/enviroment-editor/static/js/main.e8cc7b98.js",
     "static/js/787.93e00141.chunk.js": "/enviroment-editor/static/js/787.93e00141.chunk.js",
-    "static/media/Fondo.png": "/enviroment-editor/static/media/Fondo.2981d5e25765c485181d.png",
-    "static/media/habitacion_0000_melamina-1-01.png": "/enviroment-editor/static/media/habitacion_0000_melamina-1-01.0b7d230d3f544376bea2.png",
-    "static/media/habitacion_0003_melamina-2-01.png": "/enviroment-editor/static/media/habitacion_0003_melamina-2-01.3d6baeac7cb9e55fa82e.png",
-    "static/media/Objetos.png": "/enviroment-editor/static/media/Objetos.f6d0b3c06f548bb62fb5.png",
-    "static/media/habitacion_0009_melamina-4-01.png": "/enviroment-editor/static/media/habitacion_0009_melamina-4-01.8a51d10ae4b25982d0d9.png",
-    "static/media/habitacion_0006_melamina-3-01.png": "/enviroment-editor/static/media/habitacion_0006_melamina-3-01.07bd60578beab4dc7378.png",
-    "static/media/habitacion_0001_melamina-1-02.png": "/enviroment-editor/static/media/habitacion_0001_melamina-1-02.99847f26489b05f75505.png",
-    "static/media/habitacion_0002_melamina-1-03.png": "/enviroment-editor/static/media/habitacion_0002_melamina-1-03.99ba06fcb0baf0296bf7.png",
-    "static/media/habitacion_0005_melamina-2-03.png": "/enviroment-editor/static/media/habitacion_0005_melamina-2-03.b790d918572c602c0777.png",
-    "static/media/habitacion_0004_melamina-2-02.png": "/enviroment-editor/static/media/habitacion_0004_melamina-2-02.3864d8f274154df1cf96.png",
-    "static/media/habitacion_0010_melamina-4-03.png": "/enviroment-editor/static/media/habitacion_0010_melamina-4-03.3f1aec7575d5928c5bbf.png",
-    "static/media/habitacion_0011_melamina-4-02.png": "/enviroment-editor/static/media/habitacion_0011_melamina-4-02.c89d7c79faed4c7af56f.png",
-    "static/media/habitacion_0007_melamina-3-02.png": "/enviroment-editor/static/media/habitacion_0007_melamina-3-02.1f7b685915c61fe73c73.png",
-    "static/media/habitacion_0008_melamina-3-03.png": "/enviroment-editor/static/media/habitacion_0008_melamina-3-03.0fca99554eab3d7c751a.png",
     "index.html": "/enviroment-editor/index.html",
     "main.9caab1e5.css.map": "/enviroment-editor/static/css/main.9caab1e5.css.map",
-    "main.55819d87.js.map": "/enviroment-editor/static/js/main.55819d87.js.map",
+    "main.e8cc7b98.js.map": "/enviroment-editor/static/js/main.e8cc7b98.js.map",
     "787.93e00141.chunk.js.map": "/enviroment-editor/static/js/787.93e00141.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9caab1e5.css",
-    "static/js/main.55819d87.js"
+    "static/js/main.e8cc7b98.js"
   ]
 }
