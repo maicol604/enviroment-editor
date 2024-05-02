@@ -32,16 +32,10 @@ interface Control {
 };
 
 interface EnvironmentProps {
-  data: {
-    frontImage: string;
-    backImage: string;
-    originalEnviroment: string;
-    images: Image[];
-    controls: Control[];
-  };
+  
 }
 
-const Editor: React.FC<EnvironmentProps> = ({ data }) => {
+const Editor: React.FC<EnvironmentProps> = ({}) => {
   const [selectedTextures, setSelectedTextures] = useState<Image[]>([]);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [option, setOption] = useState<any>(null);
@@ -154,9 +148,6 @@ const Editor: React.FC<EnvironmentProps> = ({ data }) => {
 
   useEffect(() => {
     let timeoutId: any;
-
-    if(data.controls.length>0)
-      setSectionSelected(data.controls[0].id);
 
     const handleMouseMove = () => {
       setIsMouseMoving(true);
