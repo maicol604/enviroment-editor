@@ -5,7 +5,7 @@
     height: 100vh;
     background-color: #eee;
     .front-img {
-        z-index: 1000;
+        // z-index: 1000;
     }
     .sumary-item {
         display: flex;
@@ -47,7 +47,29 @@
             display: flex;
             width: fit-content;
             position: relative;
-            img {
+            .enviroment-active-wrapper {
+                position: absolute;
+                bottom: 1rem;
+                left: 50%;
+                transform: translateX(-50%);
+                // padding: .5rem;
+                background-color: #fff;
+                z-index: 1;
+                border-radius: .25rem;
+                display: flex;
+                overflow: hidden;
+                font-size: .75rem;
+                .envitomen-indicator {
+                    padding: .5rem;
+                    transition: all .25s;
+                    border-radius: .0rem;
+                }
+                .envitomen-indicator-active {
+                    background-color: #02ADEE;
+                    color: #fff;
+                }
+            }
+            > img {
                 width: 100%;
                 left: 0;
                 top: 0;
@@ -55,6 +77,11 @@
                 max-height: 100vh;
                 object-fit: contain;
                 pointer-events: none;
+            }
+            .absolute-0-0 {
+                position: absolute;
+                top: 0;
+                left: 0;
             }
             .img-layer {
                 opacity: 0;
@@ -120,6 +147,24 @@
         flex: 0 0 auto;
         transition: all .25s;
         display: flex;
+        .compare-enviroments-btn {
+            width: 3rem;
+            height: 3rem;
+            background-color: #fff;
+            left: -3rem;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: .5rem 0 0 .5rem;
+            bottom: 2rem;
+            transition: all .25s;
+            &:hover {
+                left: -4rem;
+                width: 4rem;
+            }
+        }
         .sidebar-controls {
             color: #292D32;
             width: 2.5rem;
@@ -185,6 +230,11 @@
     position: relative;
     flex-direction: column;
     max-height: calc(100vh - 2rem);
+    .summary-container {
+        max-height: 90vh;
+        overflow-y: auto;
+        padding-bottom: 5rem;
+    }
     .sidebar-header {
         margin-bottom: 1rem;
         padding: 1rem 0;
@@ -197,6 +247,25 @@
         }
         > span:last-child {
             margin-bottom: 0;
+        }
+    }
+    .sidebar-summary {
+        margin: 0;
+        padding: 0;
+    }
+    .sidebar-textures {
+        display: flex;
+        margin-bottom: 0;
+        .filter-btn-wrapper {
+            margin-left: 1rem;
+        }
+    }
+    .filter-tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+        > span {
+            margin-bottom: .5rem;
         }
     }
     .sidebar-content {
@@ -217,8 +286,25 @@
         border-radius: 1rem;
         overflow: hidden;
         position: relative;
+        transition: all .25s;
         &.enviroment-item {
             height: 30vh;
+        }
+        .texture-more-info {
+            position: absolute;
+            top: .25rem;
+            right: .25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background-color: rgba(0,0,0,.5);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all .25s;
+            transform: rotate(90deg);
         }
         img {
             width: 100%;
@@ -234,7 +320,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgba(0,0,0,.5);
+            background-color: rgba(0,0,0,.25);
             color: #fff;
             padding: 1rem;
             box-sizing: border-box;
@@ -252,6 +338,9 @@
             .texture-data {
                 opacity: 1;
             }
+            .texture-more-info {
+                opacity: 1;
+            }
         }
     }
     .texture-item-selected::after{
@@ -262,6 +351,7 @@
         position: absolute;
         bottom: 0;
         left: 0;
+        transition: all .25s;
         // border: 4px solid #02ADEE;
         // box-sizing: border-box;
         img {

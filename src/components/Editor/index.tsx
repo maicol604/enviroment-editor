@@ -1,19 +1,28 @@
 // Environment.tsx
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
-import { Row, Col, Tooltip } from 'antd';
+import { Row, Col, Tooltip, Button, Modal, Checkbox, Tag } from 'antd';
 import {
   CodeSandboxOutlined,
   BlockOutlined,
   TagOutlined,
   CloseOutlined,
-  FormOutlined
+  FormOutlined,
+  DesktopOutlined,
+  SplitCellsOutlined,
+  MoreOutlined,
+  FilterOutlined,
+  CloseCircleOutlined,
+  ClearOutlined,
+  ColumnWidthOutlined,
+  StarOutlined
 } from '@ant-design/icons';
 import ImageLoader from '../ImageLoader';
 import { useAppContext } from '../../Context';
 import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { Select } from 'antd';
+import ComparisonSlider from '../ComparisonSlider';
 
 interface Image {
   id: string;
@@ -32,11 +41,11 @@ interface Control {
 };
 
 interface EnvironmentProps {
-  
 }
 
 const Editor: React.FC<EnvironmentProps> = ({}) => {
-  const [selectedTextures, setSelectedTextures] = useState<Image[]>([]);
+  const [selectedTextures1, setSelectedTextures1] = useState<Image[]>([]);
+  const [selectedTextures2, setSelectedTextures2] = useState<Image[]>([]);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [option, setOption] = useState<any>(null);
   const [isMouseMoving, setIsMouseMoving] = useState(false);
@@ -47,21 +56,15 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
   const [enviromentSearch, setEnviromentSearch] = useState<string>("");
   const [categories, setCategories] = useState<any[]>([]);
   const [categorySelected, setCategorySelected] = useState<any>('-1');
-
+  const [comparator, setComparator] = useState<boolean>(false);
+  const [sliderPosition, setSliderPosition] = useState<number>(50);
+  const [enviromentSelectedComparator, setEnviromentSelectedComparator] = useState<number>(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filters, setFilters] = useState<any[]>([]);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [textureDetail, setTextureDetail] = useState<any>(null);
+  
   const { state, dispatch } = useAppContext();
-
-  // {
-  //   id:"0",
-  //   url:require('./assets/images/sampleImages/habitacion_0000_melamina-1-01.png'), 
-  //   textureUrl:require('./assets/images/sampleImages/habitacion_0000_melamina-1-01.png'), 
-  //   title:"text test 1 1 1",
-  //   controlId:"1",
-  //   category:"",
-  //   sizes:{
-  //     h:"",
-  //     w:""
-  //   }
-  // },
 
   const termIdExists = (termId:any, objectArray:[]) => {
     // console.log("onj",objectArray.find((obj:any) => obj.term_id === termId),termId, objectArray)
@@ -75,6 +78,7 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
       thumbnail: env.thumbnail,
       ...env
     }));
+
     let categoriesCpy:any = [];
     for(let i=0;i<envCpy.length;i++) {
       // console.log(envCpy[i].enviroment_category)
@@ -94,21 +98,9 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
   },[])
 
   useEffect(()=>{
-    // console.log("enviroments data")
-    // let cpy = state.environments.map((env:any) => ({
-    //   ...env,
-    //   name: env.title,
-    //   id: env.id,
-    //   thumbnail: env.thumbnail,
-    //   coordinates: JSON.parse(env.metadata.custom_post_type_coordinates),
-    // }));
 
     let texturesArray:any = [];
     for(let i=0;i<state.enviromentSelected.textures.length;i++){
-      // console.log(state.enviromentSelected.textures[i])
-      // for(let j=0;j<state.enviromentSelected.textures.textures.length;j++){
-
-      // }
       let texturesCpy = state.enviromentSelected.textures[i].textures.map((texture:any, index:number)=>({
         id: index+""+i,
         title: texture.name,
@@ -125,22 +117,7 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
       }));
       texturesArray = [...texturesArray, ...texturesCpy]
     }
-
-    // let texturesCpy = state.enviromentSelected.textures.map((texture:any, index:number)=>({
-    //   id: index,
-    //   title: texture.name,
-    //   textureUrl: texture.texture,
-    //   url:texture.texture,
-    //   controlId:1,
-    //   category:"",
-    //   sizes:{
-    //     h:"",
-    //     w:""
-    //   }
-    // }));
-
-    // console.log('texture',texturesArray);
-
+    //console.log(texturesArray)
     setTextures(texturesArray);
     setControls(JSON.parse(state.enviromentSelected.metadata.custom_post_type_coordinates).map((item:any, index:any)=>({x:item.x, y:item.y, id:(index+1)})));
     // console.log('here',cpy);
@@ -172,14 +149,39 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
   }
 
   const handleTexture = (image: Image) => {
-    const existingTextureIndex = selectedTextures.findIndex((item) => item.controlId === image.controlId);
+    if(!comparator) {
+      const existingTextureIndex = selectedTextures1.findIndex((item) => item.controlId === image.controlId);
 
-    if (existingTextureIndex !== -1) {
-      const updatedTextures = [...selectedTextures];
-      updatedTextures[existingTextureIndex] = image;
-      setSelectedTextures(updatedTextures);
-    } else {
-      setSelectedTextures([...selectedTextures, image]);
+      if (existingTextureIndex !== -1) {
+        const updatedTextures = [...selectedTextures1];
+        updatedTextures[existingTextureIndex] = image;
+        setSelectedTextures1(updatedTextures);
+      } else {
+        setSelectedTextures1([...selectedTextures1, image]);
+      }
+    }
+    if(comparator){
+      if(controls[parseInt(sectionSelected)-1].x<sliderPosition) {
+        const existingTextureIndex = selectedTextures1.findIndex((item) => item.controlId === image.controlId);
+
+        if (existingTextureIndex !== -1) {
+          const updatedTextures = [...selectedTextures1];
+          updatedTextures[existingTextureIndex] = image;
+          setSelectedTextures1(updatedTextures);
+        } else {
+          setSelectedTextures1([...selectedTextures1, image]);
+        }
+      } else {
+        const existingTextureIndex = selectedTextures2.findIndex((item) => item.controlId === image.controlId);
+
+        if (existingTextureIndex !== -1) {
+          const updatedTextures = [...selectedTextures2];
+          updatedTextures[existingTextureIndex] = image;
+          setSelectedTextures2(updatedTextures);
+        } else {
+          setSelectedTextures2([...selectedTextures2, image]);
+        }
+      }
     }
     // console.log('selectedTextures',selectedTextures);
   };
@@ -204,7 +206,8 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
   const handleSelectedEnviroment = (env:any) => {
     // console.log(env);
     dispatch({ type: 'SET_ENVIRONMENT', payload: env });
-    setSelectedTextures([]);
+    setSelectedTextures1([]);
+    setSelectedTextures2([]);
     setSectionSelected("1");
   }
 
@@ -222,14 +225,110 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
     setCategorySelected('-1');
   }
 
+  const handleComparisonChange = (e:any) => {
+    setSliderPosition(e.percentage);
+  }
+
+  useEffect(()=> {
+    // console.log(enviromentSelectedComparator, sectionSelected, controls);
+    // console.log(enviromentSelectedComparator, sectionSelected, controls);
+    if(comparator && controls[(parseInt(sectionSelected) - 1)]) {
+      if(controls[parseInt(sectionSelected)-1].x<sliderPosition){
+        setEnviromentSelectedComparator(1);
+      } else {
+        setEnviromentSelectedComparator(2);
+      }
+    }
+  }, [sliderPosition])
+
+  const handleComparator = () => {
+    setComparator(!comparator);
+  }
+
+  const handleModal = () => {
+    console.log(state.enviromentSelected.all_labels)
+    setIsModalOpen(!isModalOpen);
+  }
+
+  const verifyCategories = (texture:any) => {
+    let i = 0;
+    while(texture.texture_information.category[i]){
+      if(filters.includes(texture.texture_information.category[i].slug))
+        return true;
+      i++
+    }
+    return false;
+  }
+
+  const handleDetailModal = () => {
+    setIsDetailOpen(!isDetailOpen);
+  }
+  
   return (
     <React.Fragment>
       <div className='editor-container'>
+
         <div className='enviroment-container'>
             <div className='editor-wrapper'>
               <ImageLoader src={state.enviromentSelected.background_image} alt="" className='original-enviroment' loading="lazy"/>
-              <ImageLoader src={state.enviromentSelected.background_image} alt="Back Image" className='img-bg' loading="lazy"/>
-              {selectedTextures.map((item, index) => (
+              {comparator ?
+              <ComparisonSlider 
+                leftComponent = {
+                  <>
+                    <ImageLoader src={state.enviromentSelected.background_image} alt="Back Image" className='img-bg' loading="lazy"/>
+
+                    {selectedTextures1.map((item, index) => (
+                      <ImageLoader 
+                        className='img-layer absolute-0-0'
+                        src={item.url} 
+                        alt={""} 
+                        key={index+""+item.url} 
+                        skeleton={false}
+                      />
+                    ))}
+
+                    <ImageLoader src={state.enviromentSelected.front_image} alt="" loading="lazy" className='front-img absolute-0-0'/>
+                  </>
+                }
+                rightComponent = {
+                  <>
+                    <ImageLoader src={state.enviromentSelected.background_image} alt="Back Image" className='img-bg' loading="lazy"/>
+                    
+                    {selectedTextures2.map((item, index) => (
+                      <ImageLoader 
+                        className='img-layer absolute-0-0'
+                        src={item.url} 
+                        alt={""} 
+                        key={index+""+item.url} 
+                        skeleton={false}
+                      />
+                    ))}
+
+                    <ImageLoader src={state.enviromentSelected.front_image} alt="" loading="lazy" className='front-img absolute-0-0'/>
+                  </>
+                }
+                onChange={handleComparisonChange}
+              />
+              :
+              <>
+                <ImageLoader src={state.enviromentSelected.background_image} alt="Back Image" className='img-bg' loading="lazy"/> 
+                {selectedTextures1.map((item, index) => (
+                    <ImageLoader 
+                      className='img-layer'
+                      src={item.url} 
+                      alt={""} 
+                      key={index+""+item.url} 
+                      skeleton={false}
+                    />
+                ))}
+                <ImageLoader src={state.enviromentSelected.front_image} alt="" loading="lazy" className='front-img'/>
+              </>
+              }
+
+              
+
+
+              {/* {selectedTextures2.map((item, index) => (
                   <ImageLoader 
                     className='img-layer'
                     src={item.url} 
@@ -237,13 +336,14 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                     key={index+""+item.url} 
                     skeleton={false}
                   />
-              ))}
-              <ImageLoader src={state.enviromentSelected.front_image} alt="" loading="lazy" className='front-img'/>
+              ))}  */}
+
+              
               {
                 controls.map((item:any, index:any)=> {
                   return (
                     <button 
-                      className = {`enviroment-change-control ${isMouseMoving?"enviroment-change-control-active":""} ${sectionSelected===item.id?"enviroment-change-control-selected":""}`} 
+                      className = {`enviroment-change-control ${isMouseMoving?"enviroment-change-control-active":""} ${`${sectionSelected}`===`${item.id}`?"enviroment-change-control-selected":""}`} 
                       key={index} 
                       style={{left:`${item.x}%`,top:`${item.y}%`}}
                       onClick={()=>handleEnviroment(item)}
@@ -253,8 +353,19 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                   )
                 })
               }
+              {comparator &&
+                <div className='enviroment-active-wrapper'>
+                  <div className={'envitomen-indicator '+(enviromentSelectedComparator===1?'envitomen-indicator-active':'')}>
+                    <DesktopOutlined />
+                  </div>
+                  <div className={'envitomen-indicator '+(enviromentSelectedComparator===2?'envitomen-indicator-active':'')}>
+                    <DesktopOutlined />
+                  </div>
+                </div>
+              }
             </div>
         </div>
+
         <div className={`editor-sidebar ${openSidebar?'open-editor-sidebar':''}`}>
           <div className='sidebar-controls'>
             <ul>
@@ -291,6 +402,9 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
               }
             </ul>
           </div>
+          <div className='compare-enviroments-btn' onClick={handleComparator}>
+            <SplitCellsOutlined />
+          </div>
           <div className='editor-sidebar-content'>
             <div className='textures-container'>
               {
@@ -324,7 +438,7 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                         (item.enviroment_category) ?
                         ((item.enviroment_category.find((obj:any)=>(obj.term_id === categorySelected))) ?
                         <Col key={index} xs={24} sm={24} md={24} lg={24}>
-                          <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                          <div className={`enviroment-item texture-item-container ${selectedTextures1.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
                             <div className='texture-data'>
                               <h5>{item.title}</h5>
                             </div>
@@ -341,7 +455,7 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                       (sectionSelected && state.environments.map((item:any, index:any) => (
                         (enviromentSearch==="") ?
                         <Col key={index} xs={24} sm={24} md={24} lg={24}>
-                          <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                          <div className={`enviroment-item texture-item-container ${selectedTextures1.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
                             <div className='texture-data'>
                               <h5>{item.title}</h5>
                             </div>
@@ -352,7 +466,7 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                         (
                           (item.labels && item.labels.find((obj:any)=>(new RegExp(enviromentSearch, "i").test(obj.name)))) ?
                             <Col key={index} xs={24} sm={24} md={24} lg={24}>
-                              <div className={`enviroment-item texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
+                              <div className={`enviroment-item texture-item-container ${selectedTextures1.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleSelectedEnviroment(item)}>
                                 <div className='texture-data'>
                                   <h5>{item.title}</h5>
                                 </div>
@@ -371,18 +485,43 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
               {
               option === 2 &&
               <>
-                <div className='sidebar-header'>
+                <div className='sidebar-header sidebar-textures'>
                   <Input addonBefore={<SearchOutlined />} placeholder="Search asd" onChange={handleTextureSearch} />
+                  <div className='filter-btn-wrapper'>
+                    <Button type="primary" shape="circle" icon={<FilterOutlined />} onClick={handleModal}/>
+                  </div>
                 </div>
+                {filters.length > 0 && 
+                <div className='filter-tags-container'>
+                  {
+                    [...state.enviromentSelected.all_labels.map((category:any)=>({ label:category.name, value:category.slug }))].map((texture)=> {
+                      if(filters.includes(texture.value))
+                        return (
+                          <>
+                            <Tag>{texture.label}</Tag>
+                          </>
+                        )
+                      return <></>;
+                    })
+                  }
+                  <Button type="primary" shape="circle" icon={<ClearOutlined />} onClick={()=>setFilters([])}/>
+                </div>
+                }
                 <Row gutter={[2, 2]} className='w-full'>
-                  {(textureSearch === "") ?
+                  {
+                    filters.length > 0 ?
                     <>
-                      {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
+                    {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).filter((texture:any)=>verifyCategories(texture)).map((item:any, index:any) => (
                         <Col key={index} xs={8} sm={8} md={8} lg={8}>
-                          <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
-                            {/* <div className='texture-data'>
+                          <div 
+                            className={`texture-item-container ${(enviromentSelectedComparator===1?(selectedTextures1.some((texture)=>texture.id===item.id)):(selectedTextures2.some((texture)=>texture.id===item.id)))?"texture-item-selected":""}`} 
+                          >
+                            <div className='texture-data' onClick={()=>handleTexture(item)}>
                               <h5>{item.name}</h5>
-                            </div> */}
+                            </div>
+                              <div className='texture-more-info' onClick={()=>{setTextureDetail(item); setIsDetailOpen(true)}}>
+                              <MoreOutlined />
+                            </div>
                             <ImageLoader src={item.textureUrl} alt="" skeleton/>
                           </div>
                         </Col>
@@ -390,19 +529,48 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                     </>
                     :
                     <>
-                      {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
-                        (item.texture_information.category.find((obj:any)=>(new RegExp(textureSearch, "i").test(obj.name)))) ?
-                        <Col key={index} xs={8} sm={8} md={8} lg={8}>
-                          <div className={`texture-item-container ${selectedTextures.some((texture)=>texture.id===item.id)?"texture-item-selected":""}`} onClick={()=>handleTexture(item)}>
-                            {/* <div className='texture-data'>
-                              <h5>{item.name}</h5>
-                            </div> */}
-                            <ImageLoader src={item.textureUrl} alt="" skeleton/>
-                          </div>
-                        </Col>
-                        :
-                        <></>
-                      ))}
+                    {
+                    (textureSearch === "") ?
+                      <>
+                        {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
+                          <Col key={index} xs={8} sm={8} md={8} lg={8}>
+                            <div 
+                              className={`texture-item-container ${(enviromentSelectedComparator===1?(selectedTextures1.some((texture)=>texture.id===item.id)):(selectedTextures2.some((texture)=>texture.id===item.id)))?"texture-item-selected":""}`} 
+                            >
+                              <div className='texture-data' onClick={()=>handleTexture(item)}>
+                                <h5>{item.name}</h5>
+                              </div>
+                              <div className='texture-more-info' onClick={()=>{setTextureDetail(item); setIsDetailOpen(true)}}>
+                                <MoreOutlined />
+                              </div>
+                              <ImageLoader src={item.textureUrl} alt="" skeleton/>
+                            </div>
+                          </Col>
+                        ))}
+                      </>
+                      :
+                      <>
+                        {(sectionSelected) && textures.filter((texture:any)=>(`${texture.controlId}`===`${sectionSelected}`)).map((item:any, index:any) => (
+                          (item.texture_information.category.find((obj:any)=>(new RegExp(textureSearch, "i").test(obj.name)))) ?
+                          <Col key={index} xs={8} sm={8} md={8} lg={8}>
+                            <div 
+                              className={`texture-item-container ${(enviromentSelectedComparator===1?(selectedTextures1.some((texture)=>texture.id===item.id)):(selectedTextures2.some((texture)=>texture.id===item.id)))?"texture-item-selected":""}`} 
+                              onClick={()=>handleTexture(item)}
+                            >
+                              <div className='texture-data'>
+                                <h5>{item.name}</h5>
+                              </div>
+                              <div className='texture-more-info' onClick={()=>{setTextureDetail(item); setIsDetailOpen(true)}}>
+                                <MoreOutlined />
+                              </div>
+                              <ImageLoader src={item.textureUrl} alt="" skeleton/>
+                            </div>
+                          </Col>
+                          :
+                          <></>
+                        ))}
+                      </>
+                      }
                     </>
                   }
                 </Row>
@@ -411,28 +579,85 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
               {
               option === 3 &&
               <>
-                <div className='sidebar-header'>
+                <div className='sidebar-header sidebar-summary'>
                   <h3>Summary</h3>
                 </div>
-                <Row gutter={[16, 16]} className='w-full'>
-                  {sectionSelected && selectedTextures.map((item:any, index:any) => (
-                    <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
-                      <div className='sumary-item-img-wrapper rounded-1rem'>
-                        <img src={item.textureUrl} alt="" loading="lazy"/>
-                      </div>
-                      <div className='sumary-item-content'>
-                        <span className='texture-title'>{item.title}</span>
-                        <span>{item.name}</span>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
+                <div className='summary-container'>
+                  {
+                    comparator && 
+                    <h3>Left enviroment</h3>
+                  }
+                  <Row gutter={[16, 16]} className='w-full'>
+                    {sectionSelected && selectedTextures1.map((item:any, index:any) => (
+                      <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
+                        <div className='sumary-item-img-wrapper rounded-1rem'>
+                          <img src={item.textureUrl} alt="" loading="lazy"/>
+                        </div>
+                        <div className='sumary-item-content'>
+                          <span className='texture-title'>{item.title}</span>
+                          <span>{item.name}</span>
+                        </div>
+                      </Col>
+                    ))}
+                  </Row>
+                  
+                  {
+                    comparator && 
+                    <>
+                      <h3>Right enviroment</h3>
+                      
+                      <Row gutter={[16, 16]} className='w-full'>
+                      {sectionSelected && selectedTextures2.map((item:any, index:any) => (
+                        <Col key={index} xs={24} sm={24} md={24} lg={24} className='sumary-item'>
+                          <div className='sumary-item-img-wrapper rounded-1rem'>
+                            <img src={item.textureUrl} alt="" loading="lazy"/>
+                          </div>
+                          <div className='sumary-item-content'>
+                            <span className='texture-title'>{item.title}</span>
+                            <span>{item.name}</span>
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </>
+                  }
+                </div>
               </>
               }
             </div>
           </div>
         </div>
-
+        <>
+        <Modal title="" open={isModalOpen} onOk={handleModal} onCancel={handleModal} cancelButtonProps={{ style: { display: 'none' } }}>
+          <div className='texture-detail'>
+              <h3>Categories</h3>
+              <div>
+                <Checkbox.Group
+                  options={[...state.enviromentSelected.all_labels.map((category:any)=>({ label:category.name, value:category.slug }))]}
+                  onChange={(e)=>setFilters(e)}
+                  value={filters}
+                />
+              </div>
+          </div>
+        </Modal>
+        <Modal title="" open={isDetailOpen} onOk={handleDetailModal} onCancel={handleDetailModal} cancelButtonProps={{ style: { display: 'none' } }}>
+          <div className='texture-detail'>
+              {textureDetail &&
+              <>
+                <h3>{textureDetail.name}</h3>
+                <p>{textureDetail.texture_information.description}</p>
+                <div>
+                  <Tag icon={<ColumnWidthOutlined />} color="success">
+                  </Tag>
+                  <Tag icon={<StarOutlined />} color="error">
+                    New
+                  </Tag>
+                </div>
+              </>
+              }
+          </div>
+        </Modal>
+        </>
       </div>  
 
     </React.Fragment>
