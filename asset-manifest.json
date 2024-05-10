@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/enviroment-editor/static/css/main.f4b822cd.css",
-    "main.js": "/enviroment-editor/static/js/main.bf11895e.js",
+    "main.css": "/enviroment-editor/static/css/main.225c6fa2.css",
+    "main.js": "/enviroment-editor/static/js/main.d4549a71.js",
     "static/js/787.93e00141.chunk.js": "/enviroment-editor/static/js/787.93e00141.chunk.js",
     "index.html": "/enviroment-editor/index.html",
     "static/media/compare.svg": "/enviroment-editor/static/media/compare.7daca8f4b8aeda66a861e74715ce559d.svg",
-    "main.f4b822cd.css.map": "/enviroment-editor/static/css/main.f4b822cd.css.map",
-    "main.bf11895e.js.map": "/enviroment-editor/static/js/main.bf11895e.js.map",
+    "main.225c6fa2.css.map": "/enviroment-editor/static/css/main.225c6fa2.css.map",
+    "main.d4549a71.js.map": "/enviroment-editor/static/js/main.d4549a71.js.map",
     "787.93e00141.chunk.js.map": "/enviroment-editor/static/js/787.93e00141.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f4b822cd.css",
-    "static/js/main.bf11895e.js"
+    "static/css/main.225c6fa2.css",
+    "static/js/main.d4549a71.js"
   ]
 }
