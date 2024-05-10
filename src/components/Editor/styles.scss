@@ -226,14 +226,32 @@
 .textures-container {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     position: relative;
     flex-direction: column;
     max-height: calc(100vh - 2rem);
+    height: 100vh;
     .summary-container {
-        max-height: 90vh;
+        max-height: 75vh;
         overflow-y: auto;
         padding-bottom: 5rem;
+    }
+    .summary-options {
+        position: absolute;
+        bottom: 0;
+        ul {
+            list-style: none;
+            li {
+                list-style: none;
+                display: flex;
+                margin-bottom: .5rem;
+                // disabled opcion
+                cursor: not-allowed;
+                .option-text {
+                    margin-left: .5rem;
+                }
+            }
+        }
     }
     .sidebar-header {
         margin-bottom: 1rem;

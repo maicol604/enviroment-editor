@@ -15,7 +15,9 @@ import {
   CloseCircleOutlined,
   ClearOutlined,
   ColumnWidthOutlined,
-  StarOutlined
+  StarOutlined,
+  DownloadOutlined,
+  BorderOutlined
 } from '@ant-design/icons';
 import ImageLoader from '../ImageLoader';
 import { useAppContext } from '../../Context';
@@ -621,6 +623,18 @@ const Editor: React.FC<EnvironmentProps> = ({}) => {
                     </Row>
                   </>
                   }
+                </div>
+                <div className='summary-options'>
+                  <ul>
+                    <li>
+                      <BorderOutlined />
+                      <span className='option-text'>Request material samples</span>
+                    </li>
+                    <li>
+                      <DownloadOutlined />
+                      <span className='option-text'>Download product information</span>
+                    </li>
+                  </ul>
                 </div>
               </>
               }
